@@ -18,6 +18,7 @@ public class Movement : ScriptableObject
     [SerializeField] bool onlyFirst = false;
     public List<Vector2Int> GetPossibleMovements(Vector2Int position, Piece[,] board)
     {
+        return null;
         Vector2Int[] directionOffsets = new Vector2Int[]
             {
             new Vector2Int(1, 0),   // Right

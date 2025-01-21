@@ -9,7 +9,7 @@ public class Square : MonoBehaviour
 
     public bool white;
 
-    [SerializeField] Color whiteColor, BlackColor;
+    [SerializeField] Sprite whiteColor, BlackColor;
 
     private void Start()
     {
@@ -20,11 +20,11 @@ public class Square : MonoBehaviour
     {
         if (white)
         {
-            GetComponent<SpriteRenderer>().color = whiteColor;
+            GetComponent<SpriteRenderer>().sprite = whiteColor;
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = BlackColor;
+            GetComponent<SpriteRenderer>().sprite = BlackColor;
         }
     }
 
