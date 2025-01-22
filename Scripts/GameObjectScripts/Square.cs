@@ -4,27 +4,35 @@ using UnityEngine;
 
 public class Square : MonoBehaviour
 {
-    public int row;
-    public int col;
-
     public bool white;
-
-    [SerializeField] Sprite whiteColor, BlackColor;
+    public bool marked;
+    [SerializeField] Sprite whiteColor, BlackColor, whiteMarkedColor, blackMarkedColor;
 
     private void Start()
     {
         DetermineColor();
     }
-    
+    public void mark(bool marked)
+    {
+        this.marked = marked;
+        DetermineColor ();
+    }
     public void DetermineColor()
     {
         if (white)
         {
-            GetComponent<SpriteRenderer>().sprite = whiteColor;
+            if(!marked)
+                GetComponent<SpriteRenderer>().sprite = whiteColor;
+            else
+                GetComponent<SpriteRenderer>().sprite = whiteMarkedColor;
+
         }
         else
         {
-            GetComponent<SpriteRenderer>().sprite = BlackColor;
+            if (!marked)
+                GetComponent<SpriteRenderer>().sprite = BlackColor;
+            else
+                GetComponent<SpriteRenderer>().sprite = blackMarkedColor;
         }
     }
 

@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,22 +16,24 @@ public class Movement : ScriptableObject
     [SerializeField] bool takes = false;
     [SerializeField] bool onlyTakes = false;
     [SerializeField] int[] directions = {2};
-    [SerializeField] int breakLength = 0;
-    [SerializeField] int breakDirection = 0;
-    [SerializeField] bool onlyFirst = false;
+    [SerializeField] Vector2Int[] breakPoints;
+    public bool onlyFirst = false;
     public List<Vector2Int> GetPossibleMovements(Vector2Int position, Piece[,] board)
     {
-        return null;
+        if(movementLength == 0) {
+            movementLength = Mathf.Max(board.GetLength(0), board.GetLength(1));
+        }
+        Piece ogPiece = board[position.x, position.y];
         Vector2Int[] directionOffsets = new Vector2Int[]
             {
-            new Vector2Int(1, 0),   // Right
-            new Vector2Int(1, 1),   // Top-right
-            new Vector2Int(0, 1),   // Top
-            new Vector2Int(-1, 1),  // Top-left
-            new Vector2Int(-1, 0),  // Left
-            new Vector2Int(-1, -1), // Bottom-left
-            new Vector2Int(0, -1),  // Bottom
-            new Vector2Int(1, -1)   // Bottom-right
+            new Vector2Int(1, 0),   // 0 Right
+            new Vector2Int(1, 1),   // 1 Top-right
+            new Vector2Int(0, 1),   // 2 Top
+            new Vector2Int(-1, 1),  // 3 Top-left
+            new Vector2Int(-1, 0),  // 4 Left
+            new Vector2Int(-1, -1), // 5 Bottom-left
+            new Vector2Int(0, -1),  // 6 Bottom
+            new Vector2Int(1, -1)   // 7 Bottom-right
             };
 
         List<Vector2Int> movements = new List<Vector2Int>();
@@ -52,13 +57,116 @@ public class Movement : ScriptableObject
             // Add the new position
             Vector2Int newPosition = position + displacement;
 
-            if (jumps)
+            Stack<Vector2Int> moveChecks = new Stack<Vector2Int>();
+           
+
+            if (breakPoints.Count() == 0)
             {
-                if(takes && board[newPosition.x, newPosition.y])
+                AddPointsInLine(position, newPosition, moveChecks);
+                FilterMovements(moveChecks, movements, board, ogPiece);
+
+            }
+            else
+            {
+
+                foreach (Vector2Int breakPoint in breakPoints)
                 {
-                    movements.Add(newPosition);
+                    AddPointsInLine(position, newPosition, moveChecks);
+
+                    offset = directionOffsets[(direction + breakPoint.y + 6) % 8];
+
+                    displacement = offset * breakPoint.x;
+
+                    Vector2Int newnewPosition = newPosition + displacement;
+                    AddPointsInLine(newPosition, newnewPosition, moveChecks);
+                    FilterMovements(moveChecks, movements, board, ogPiece);
+
+                }
+
+            }
+        }
+
+        return movements;
+    }
+
+
+    void FilterMovements(Stack<Vector2Int> moveChecks, List<Vector2Int> movements, Piece[,] board, Piece ogPiece)
+    {
+        
+        bool addMove = true;
+        Vector2Int moveCheck = moveChecks.Pop();
+        if (moveCheck.x < 0 || moveCheck.y < 0 || moveCheck.x >= board.GetLength(0) || moveCheck.y >= board.GetLength(1))
+        {
+            addMove = false;
+        }
+        if(addMove && board[moveCheck.x, moveCheck.y] != null && ogPiece.isBlack == board[moveCheck.x, moveCheck.y].isBlack)
+        {
+            addMove = false;
+        }
+        if (addMove && onlyTakes && board[moveCheck.x, moveCheck.y] == null)
+        {
+            addMove = false;
+        }
+        if (addMove&& !takes && board[moveCheck.x, moveCheck.y] != null)
+        {
+            addMove = false;
+        }
+        if (addMove && !jumps)
+        {
+            foreach(Vector2Int move in moveChecks)
+            {
+                if (board[move.x,move.y] != null)
+                {
+                    addMove = false;
+                    while (!moveChecks.Peek().Equals(move))
+                    {
+                        moveChecks.Pop();
+                    }
+                    break;
                 }
             }
+        }
+        if(disjointed)
+        {
+            moveChecks.Clear();
+        }
+        if (addMove)
+        {
+            movements.Add(moveCheck);
+        }
+        if(moveChecks.Count > 0)
+            FilterMovements(moveChecks, movements, board, ogPiece);
+    }
+
+    void AddPointsInLine(Vector2Int position, Vector2Int newPosition, Stack<Vector2Int> moveChecks)
+    {
+        int deltaX = Mathf.Abs(newPosition.x - position.x);
+        int deltaY = Mathf.Abs(newPosition.y - position.y);
+
+        // Check if they are in a straight line
+        if (deltaX != 0 && deltaY != 0 && deltaX != deltaY)
+        {
+            Debug.Log("The points are not in a straight line.");
+            return;
+        }
+
+        // Determine the step for x and y
+        int stepX = deltaX == 0 ? 0 : (newPosition.x - position.x) / deltaX;
+        int stepY = deltaY == 0 ? 0 : (newPosition.y - position.y) / deltaY;
+
+        Vector2Int current = position;
+
+        while (true)
+        {
+            current = new Vector2Int(current.x + stepX, current.y + stepY);
+
+            if (current == newPosition)
+            {
+                moveChecks.Push(current); // Add newPosition
+                break;
+            }
+
+            moveChecks.Push(current); // Add intermediate points
         }
     }
 }

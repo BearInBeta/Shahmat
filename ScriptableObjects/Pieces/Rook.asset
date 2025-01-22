@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 071d061b626356347804d2d998393bd6, type: 3}
+  m_Name: Rook
+  m_EditorClassIdentifier: 
+  isBlack: 0
+  movements:
+  - {fileID: 11400000, guid: 6c47d4e0283865543b3854a4c4973b73, type: 2}
+  spriteBlack: {fileID: 21300000, guid: fa9bafd7d5ece864da5aa20c8df9ccd8, type: 3}
+  spriteWhite: {fileID: 21300000, guid: 2fd3339c5a014904f846419610ea8871, type: 3}
