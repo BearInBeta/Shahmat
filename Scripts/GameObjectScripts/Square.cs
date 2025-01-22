@@ -6,6 +6,7 @@ public class Square : MonoBehaviour
 {
     public bool white;
     public bool marked;
+    public Vector2Int coordinates;
     [SerializeField] Sprite whiteColor, BlackColor, whiteMarkedColor, blackMarkedColor;
 
     private void Start()
@@ -34,6 +35,16 @@ public class Square : MonoBehaviour
             else
                 GetComponent<SpriteRenderer>().sprite = blackMarkedColor;
         }
+    }
+
+    public void ActivatePiece()
+    {
+        GameController controller = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>();
+        controller.SelectSquare(coordinates);
+    }
+    private void OnMouseUp()
+    {
+        ActivatePiece();
     }
 
 }

@@ -15,5 +15,5 @@ MonoBehaviour:
   isBlack: 0
   movements:
   - {fileID: 11400000, guid: 6c47d4e0283865543b3854a4c4973b73, type: 2}
-  spriteBlack: {fileID: 21300000, guid: fa9bafd7d5ece864da5aa20c8df9ccd8, type: 3}
-  spriteWhite: {fileID: 21300000, guid: 2fd3339c5a014904f846419610ea8871, type: 3}
+  spriteBlack: {fileID: 623030088, guid: 879a69898d624ad48adc5bdb1a47791b, type: 3}
+  spriteWhite: {fileID: -2036661499, guid: 88312bcb830b4cf4fbceef04ff16c250, type: 3}

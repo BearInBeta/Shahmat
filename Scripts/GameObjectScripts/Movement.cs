@@ -25,7 +25,7 @@ public class Movement : ScriptableObject
         }
         Piece ogPiece = board[position.x, position.y];
         Vector2Int[] directionOffsets = new Vector2Int[]
-            {
+    {
             new Vector2Int(1, 0),   // 0 Right
             new Vector2Int(1, 1),   // 1 Top-right
             new Vector2Int(0, 1),   // 2 Top
@@ -34,7 +34,23 @@ public class Movement : ScriptableObject
             new Vector2Int(-1, -1), // 5 Bottom-left
             new Vector2Int(0, -1),  // 6 Bottom
             new Vector2Int(1, -1)   // 7 Bottom-right
+    };
+        if (ogPiece.isBlack)
+        {
+            directionOffsets = new Vector2Int[]
+            {
+            new Vector2Int(-1, 0),  // 4 Left
+            new Vector2Int(-1, -1), // 5 Bottom-left
+            new Vector2Int(0, -1),  // 6 Bottom
+            new Vector2Int(1, -1),   // 7 Bottom-right
+            new Vector2Int(1, 0),   // 0 Right
+            new Vector2Int(1, 1),   // 1 Top-right
+            new Vector2Int(0, 1),   // 2 Top
+            new Vector2Int(-1, 1)  // 3 Top-left
+            
             };
+        }
+
 
         List<Vector2Int> movements = new List<Vector2Int>();
         foreach (int direction in directions)
