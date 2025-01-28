@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections.LowLevel.Unsafe;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] int row, col;
+    public int row, col;
     [SerializeField] BoardCreator creator;
     [SerializeField] Movement testMovement;
     [SerializeField] int testX, testY;
@@ -13,8 +14,12 @@ public class GameController : MonoBehaviour
     [SerializeField] Piece[] whitepieceList, blackpieceList;
     [SerializeField] bool isBlack;
     [SerializeField] bool turnWhite = true;
-    Vector2Int? selected;
+    public GameObject SelectedBoard;
+    public Vector2Int? selected;
+    public bool cardWaiting;
     List<Vector2Int> currentPossibleMovements;
+    public int maxSummon;
+    [SerializeField] CardEffects cardEffects;
     
     // Start is called before the first frame update
     void Start()
@@ -39,7 +44,7 @@ public class GameController : MonoBehaviour
         }
 
     }
-    void LightUpMovements(List<Vector2Int> possibleMovements)
+    public void LightUpMovements(List<Vector2Int> possibleMovements)
     {
         UnlightAll();
         foreach (var possibleMovement in possibleMovements)
@@ -54,15 +59,29 @@ public class GameController : MonoBehaviour
             boardzone.GetComponent<Square>().mark(false);
         }
     }
-    private void DeselectAll()
+    public void DeselectAll()
     {
+        cardWaiting = false;
         selected = null;
         currentPossibleMovements = null;
         UnlightAll();
     }
+    public void ChooseSummonSquare(Vector2Int coords)
+    {
+        UnlightAll();
+        selected = coords;
+        currentPossibleMovements = null;
+        cardWaiting = false;
+
+    }
     public void SelectSquare(Vector2Int coords)
     {
-        if (selected != null)
+        if (cardWaiting)
+        {
+            ChooseSummonSquare(coords);
+
+
+        }else if (selected != null)
         {
             if (currentPossibleMovements.Contains(coords))
             {
@@ -86,6 +105,16 @@ public class GameController : MonoBehaviour
         else
         {
             DeselectAll();
+        }
+    }
+
+    public void ActivateCardEffect(Card card)
+    {
+        if(card is PieceCard)
+        {
+            PieceCard pieceCard = (PieceCard)card;
+            cardEffects.SummonPiece(pieceCard.piece);
+
         }
     }
     // Update is called once per frame
