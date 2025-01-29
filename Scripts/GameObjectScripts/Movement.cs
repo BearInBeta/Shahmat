@@ -15,7 +15,7 @@ public class Movement : ScriptableObject
     [SerializeField] bool disjointed = false;
     [SerializeField] bool takes = false;
     [SerializeField] bool onlyTakes = false;
-    [SerializeField] int[] directions = {2};
+    public int[] directions = {2};
     [SerializeField] Vector2Int[] breakPoints;
     public bool onlyFirst = false;
     public List<Vector2Int> GetPossibleMovements(Vector2Int position, Piece[,] board)

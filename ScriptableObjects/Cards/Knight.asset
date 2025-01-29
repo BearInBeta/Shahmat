@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5e1143f4df2c3d743997b6d758ee6125, type: 3}
-  m_Name: Queen
+  m_Name: Knight
   m_EditorClassIdentifier: 
-  title: THE QUEEN
-  effect: No Effect
-  movement: "\u221E"
-  art: {fileID: 21300000, guid: ddf2e1d22e338f04c9388185f327c4d5, type: 3}
-  piece: {fileID: 11400000, guid: 8a36f684813b8184ebf388b1fbfc82d9, type: 2}
+  title: THE KNIGHT
+  effect: Jump
+  movement: L-2-1
+  art: {fileID: 21300000, guid: 20b17c51df1cb704590849cf662f0513, type: 3}
+  piece: {fileID: 11400000, guid: 5a90f296eff9cfc41a07a4ee15c57aba, type: 2}

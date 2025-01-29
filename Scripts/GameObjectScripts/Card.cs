@@ -4,5 +4,6 @@ using UnityEngine;
 
 public class Card : ScriptableObject
 {
-
+    public string title, effect, movement;
+    public Sprite art;
 }
