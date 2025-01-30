@@ -6,10 +6,17 @@ public class CardEffects : MonoBehaviour
 {
     [SerializeField] BoardCreator creator;
     [SerializeField] GameController controller;
+    IEnumerator summonPieceCoroutine;
+
     public void SummonPiece(Piece piece)
     {
+        if (summonPieceCoroutine != null)
+        {
+            StopAllCoroutines();
+        }
         controller.LightUpMovements(SummonableSquares());
-        StartCoroutine(SummonPieceCoroutine(piece));
+        summonPieceCoroutine = SummonPieceCoroutine(piece);
+        StartCoroutine(summonPieceCoroutine);
     }
     List<Vector2Int> SummonableSquares()
     {
@@ -31,14 +38,21 @@ public class CardEffects : MonoBehaviour
 
     private IEnumerator SummonPieceCoroutine(Piece piece)
     {
+        while (controller.cardWaiting)
+        {
+            yield return new WaitForEndOfFrame();
+        }
         controller.cardWaiting = true;
         while (controller.cardWaiting)
         {
             yield return new WaitForEndOfFrame();
         }
-        Vector2Int selected = (Vector2Int)controller.selected;
-        if (SummonableSquares().Contains(selected))
-            SummonPiece(piece, (Vector2Int)controller.selected);
+        if (controller.selected != null)
+        {
+            Vector2Int selected = (Vector2Int)controller.selected;
+            if (SummonableSquares().Contains(selected))
+                SummonPiece(piece, (Vector2Int)controller.selected);
+        }
         
         controller.DeselectAll();
     }

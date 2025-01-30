@@ -10,11 +10,36 @@ public class CardHolder : MonoBehaviour
     [SerializeField] TMP_Text title, effect, movement;
     [SerializeField] GameObject r, tr, t, tl, l, bl, b, br;
     [SerializeField] Image art;
+    [SerializeField] Transform cardContent;
+    [SerializeField] private float cardUp;
+    bool hovering = false;
+
     public void ActivateEffect()
     {
         GameObject.FindGameObjectWithTag("GameController").GetComponent<GameController>().ActivateCardEffect(card);
     }
+    private void OnGUI()
+    {
+        if (cardContent != null)
+        {
+            if (hovering)
+            {
+                cardContent.localPosition = new Vector3(0, cardUp, 0);
 
+            }
+            else
+            {
+                cardContent.localPosition = new Vector3(0, 0, 0);
+
+            }
+        }
+    }
+    public void setHover(bool hovering)
+    {
+        if (GetComponent<Button>().interactable)
+            this.hovering = hovering;
+
+    }
     private void Start()
     {
         title.text = card.title; effect.text = card.effect; movement.text = card.movement;

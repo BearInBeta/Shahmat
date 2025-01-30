@@ -112,6 +112,7 @@ public class GameController : MonoBehaviour
     {
         if(card is PieceCard)
         {
+            DeselectAll();
             PieceCard pieceCard = (PieceCard)card;
             cardEffects.SummonPiece(pieceCard.piece);
 
